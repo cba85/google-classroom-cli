@@ -15,37 +15,37 @@ class GoogleClassroom
         $this->service = $classroom->getService();
     }
 
-    public function listCourses(OutputInterface $output)
+    public function listCourses(OutputInterface $output, array $options = [])
     {
         try {
-            return $this->service->courses->listCourses();
+            return $this->service->courses->listCourses($options);
         } catch (Google_Service_Exception $e) {
             return $this->displayError($output, $e);
         }
     }
 
-    public function getCourse(OutputInterface $output, string $courseId)
+    public function getCourse(OutputInterface $output, string $courseId, array $options = [])
     {
         try {
-            return $this->service->courses->get($courseId);
+            return $this->service->courses->get($courseId, $options);
         } catch (Google_Service_Exception $e) {
             return $this->displayError($output, $e);
         }
     }
 
-    public function listStudents(OutputInterface $output, string $courseId)
+    public function listStudents(OutputInterface $output, string $courseId, array $options = [])
     {
         try {
-            return $this->service->courses_students->listCoursesStudents($courseId);
+            return $this->service->courses_students->listCoursesStudents($courseId, $options);
         } catch (Google_Service_Exception $e) {
             return $this->displayError($output, $e);
         }
     }
 
-    public function listCourseWorks(OutputInterface $output, string $courseId)
+    public function listCourseWorks(OutputInterface $output, string $courseId, array $options = [])
     {
         try {
-            return $this->service->courses_courseWork->listCoursesCourseWork($courseId, ['courseWorkStates' => 'DRAFT']);
+            return $this->service->courses_courseWork->listCoursesCourseWork($courseId, $options);
         } catch (Google_Service_Exception $e) {
             return $this->displayError($output, $e);
         }
