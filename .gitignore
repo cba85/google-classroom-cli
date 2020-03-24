@@ -1,0 +1,4 @@
+vendor/
+auth/*
+!auth/.gitkeep
+composer.lock
