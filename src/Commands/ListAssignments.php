@@ -19,23 +19,25 @@ class ListAssignments extends Base
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$results = $this->googleClassroomService->listAssignments($output, $input->getArgument('courseId'))) {
-            return 0;
-        }
-
+        // Course information
         if (!$course = $this->googleClassroomService->getCourse($output, $input->getArgument('courseId'))) {
             return 0;
         }
 
         $output->writeln("<info>Course:</info> {$course->name}");
 
-        $output->writeln("<info>Works:</info>");
-        foreach ($results->getCourseWork() as $work) {
-            $output->writeLn(("<fg=blue>{$work->getTitle()}</fg=blue> ({$work->getState()})"));
-            if ($work->getDueDate()) {
-                $output->writeLn(("Due: {$work->getDueDate()->getDay()}/{$work->getDueDate()->getMonth()}/{$work->getDueDate()->getYear()}"));
+        // Assignment
+        if (!$results = $this->googleClassroomService->listAssignments($output, $input->getArgument('courseId'))) {
+            return 0;
+        }
+
+        $output->writeln("<info>Assignment:</info>");
+        foreach ($results->getCourseWork() as $assignment) {
+            $output->writeLn(("<fg=blue>{$assignment->getTitle()}</fg=blue> ({$assignment->getState()}) - {$assignment->getId()}"));
+            if ($assignment->getDueDate()) {
+                $output->writeLn(("Due: {$assignment->getDueDate()->getDay()}/{$assignment->getDueDate()->getMonth()}/{$assignment->getDueDate()->getYear()}"));
             }
-            $output->writeln("ID : {$work->getId()}");
+            $output->writeln("Type : {$assignment->getWorkType()}");
         }
 
         return 0;

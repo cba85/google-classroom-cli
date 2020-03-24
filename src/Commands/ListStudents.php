@@ -19,15 +19,17 @@ class ListStudents extends Base
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (!$results = $this->googleClassroomService->listStudents($output, $input->getArgument('courseId'))) {
-            return 0;
-        }
-
+        // Course information
         if (!$course = $this->googleClassroomService->getCourse($output, $input->getArgument('courseId'))) {
             return 0;
         }
 
         $output->writeln("<info>Course:</info> {$course->name}");
+
+        // Students
+        if (!$results = $this->googleClassroomService->listStudents($output, $input->getArgument('courseId'))) {
+            return 0;
+        }
 
         if (count($results->getStudents()) == 0) {
             $output->writeln("<comment>No students found.</comment>");
