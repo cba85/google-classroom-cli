@@ -4,6 +4,13 @@ A CLI to use Google Classroom API.
 
 Fetches courses, students, assignments and student-submitted URLs from Google Classroom.
 
+## Why?
+
+I want to use Google Classroom to manage my classes (students and assignments).
+I'd like to fetch URLs (containing Github repositories) submitted by the students for each assignments to automatically retrieve their projet.
+
+That's why this projet only uses Google Classroom read-only API permissions and just some ressources of the API useful for myself are available.
+
 ## Install
 
 ```bash
