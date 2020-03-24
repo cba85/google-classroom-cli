@@ -42,7 +42,7 @@ class GoogleClassroom
         }
     }
 
-    public function listCourseWorks(OutputInterface $output, string $courseId, array $options = [])
+    public function listAssignments(OutputInterface $output, string $courseId, array $options = [])
     {
         try {
             return $this->service->courses_courseWork->listCoursesCourseWork($courseId, $options);

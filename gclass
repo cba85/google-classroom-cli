@@ -3,7 +3,7 @@
 require __DIR__ . '/vendor/autoload.php';
 
 use App\Commands\ListCourses;
-use App\Commands\ListWorks;
+use App\Commands\listAssignments;
 use App\Commands\ListStudents;
 use Symfony\Component\Console\Application;
 
@@ -11,6 +11,6 @@ $application = new Application();
 
 $application->add(new ListCourses());
 $application->add(new ListStudents());
-$application->add(new ListWorks());
+$application->add(new listAssignments());
 
 $application->run();

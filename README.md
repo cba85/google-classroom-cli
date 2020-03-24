@@ -29,7 +29,7 @@ $ chmod +x gclass
 ```bash
 ./gclass list-courses # List your courses
 ./gclass list-students courseId # List the students of the course
-./gclass list-works courseId # List the works of the course
+./gclass list-assignments courseId # List the assignments of the course
 ```
 
 ## Dependencies
