@@ -6,14 +6,14 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ListSubmissions extends Base
+class ListSubmittedUrls extends Base
 {
-    protected static $defaultName = 'list-submissions';
+    protected static $defaultName = 'list-submitted-urls';
 
     protected function configure()
     {
-        $this->setDescription('List the students submissions of the course')
-            ->setHelp('This command allows you to list the students submissions of your Google Classroom course.')
+        $this->setDescription('List the urls submitted by the students of the course')
+            ->setHelp('This command allows you to listthe urls submitted by the students of your Google Classroom course.')
             ->addArgument('courseId', InputArgument::REQUIRED, 'Google Classroom course ID.')
             ->addArgument('courseWorkId', InputArgument::REQUIRED, 'Google Classroom course work ID.');
     }
@@ -45,7 +45,7 @@ class ListSubmissions extends Base
             return 0;
         }
 
-        $output->writeLn("<info>Submissions:</info> ");
+        $output->writeLn("<info>Submitted urls:</info> ");
 
         foreach ($results->getStudentSubmissions() as $submission) {
             // Student information
@@ -59,27 +59,13 @@ class ListSubmissions extends Base
             }
             $output->writeln('');
 
-            // Submission
+            // Submitted urls
             if ($submission->courseWorkType == "SHORT_ANSWER_QUESTION") {
                 $output->writeLn($submission->shortAnswerSubmission->answer);
             } elseif ($submission->courseWorkType == "ASSIGNMENT") {
                 foreach ($submission->assignmentSubmission as $attachment) {
-                    // Link
-                    if (!empty($attachment->link)) {
-                        $output->writeLn("Link: {$attachment->link->url}");
-                    }
-                    // Drive file
-                    if (!empty($attachment->driveFile)) {
-                        $output->writeLn("Drive file: {$attachment->driveFile->title} - {$attachment->driveFile->alternateLink}");
-                    }
-                    // Youtube video
-                    if (!empty($attachment->youTubeVideo)) {
-                        $output->writeLn("Youtube video: {$attachment->youTubeVideo->title} - {$attachment->youTubeVideo->alternateLink}");
-                    }
-                    // Form
-                    if (!empty($attachment->form)) {
-                        $output->writeLn("Form: {$attachment->form->title} - {$attachment->form->formUrl} / {$attachment->form->responseUrl}");
-                    }
+                    // Get link only
+                    $output->writeLn($attachment->link->url);
                 }
             }
         }

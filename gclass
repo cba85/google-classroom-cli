@@ -6,6 +6,7 @@ use App\Commands\ListCourses;
 use App\Commands\listAssignments;
 use App\Commands\ListStudents;
 use App\Commands\ListSubmissions;
+use App\Commands\ListSubmittedUrls;
 use Symfony\Component\Console\Application;
 
 $application = new Application();
@@ -14,5 +15,6 @@ $application->add(new ListCourses());
 $application->add(new ListStudents());
 $application->add(new listAssignments());
 $application->add(new ListSubmissions());
+$application->add(new ListSubmittedUrls());
 
 $application->run();

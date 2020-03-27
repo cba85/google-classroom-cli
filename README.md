@@ -31,7 +31,12 @@ $ chmod +x gclass
 ./gclass list-students courseId
 ./gclass list-assignments courseId
 ./gclass list-submissions courseId assignmentId
+./gclass list-submitted-urls courseId assignmentId
 ```
+
+## Notes
+
+- `list-submitted-urls` command will list all the urls submitted by the students if the "course work" type is "assignment". If the "course work" type is a "short answer question", it will retrieve the answer and expect it to be an url.
 
 ## Dependencies
 
