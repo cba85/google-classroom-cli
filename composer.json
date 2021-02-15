@@ -1,4 +1,8 @@
 {
+  "name": "cba85/google-classroom-cli",
+  "description": "A PHP CLI to use Google Classroom API.",
+  "homepage": "https://github.com/cba85/google-classroom-cli",
+  "license": "MIT",
   "require": {
     "google/apiclient": "^2.0",
     "symfony/console": "^5.0"
