@@ -1,0 +1,17 @@
+#!/usr/bin/env php
+<?php
+if (file_exists(__DIR__ . '/../../../autoload.php')) {
+    require __DIR__ . '/../../../autoload.php';
+} else {
+    require __DIR__ . '/../vendor/autoload.php';
+}
+
+$application = new \Symfony\Component\Console\Application('Google Classroom', '1.0.0');
+
+$application->add(new \App\Commands\ListCourses());
+$application->add(new \App\Commands\ListStudents());
+$application->add(new \App\Commands\listAssignments());
+$application->add(new \App\Commands\ListSubmissions());
+$application->add(new \App\Commands\ListSubmittedUrls());
+
+$application->run();

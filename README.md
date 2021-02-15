@@ -11,11 +11,26 @@ I'd like to fetch URLs (containing Github repositories) submitted by the student
 
 That's why this projet only uses Google Classroom read-only API permissions and just some ressources of the API useful for myself are available.
 
+## Requirements
+
+### Composer
+
+Make sure [Composer](https://getcomposer.org/download/) is installed globally.
+
 ## Install
 
 ```bash
-$ composer install
-$ chmod +x gclass
+$ composer global require cba85/google-classroom-cli
+```
+
+Then make sure you have the global Composer binaries directory in your PATH.
+
+This directory is platform-dependent, see [Composer documentation](https://getcomposer.org/doc/03-cli.md#composer-home) for details.
+
+### Update
+
+```bash
+$ composer global update cba85/google-classroom-cli
 ```
 
 ### Google Classroom API setup
@@ -27,11 +42,11 @@ $ chmod +x gclass
 ## Usage
 
 ```bash
-./gclass list-courses
-./gclass list-students courseId
-./gclass list-assignments courseId
-./gclass list-submissions courseId assignmentId
-./gclass list-submitted-urls courseId assignmentId
+$ gclass list-courses
+$ gclass list-students courseId
+$ gclass list-assignments courseId
+$ gclass list-submissions courseId assignmentId
+$ gclass list-submitted-urls courseId assignmentId
 ```
 
 ## Notes
