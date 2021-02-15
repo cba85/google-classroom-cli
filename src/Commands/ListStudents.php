@@ -2,11 +2,12 @@
 
 namespace App\Commands;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ListStudents extends Base
+class ListStudents extends Command
 {
     protected static $defaultName = 'list-students';
 
@@ -19,28 +20,30 @@ class ListStudents extends Base
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $googleClassroom = new \App\GoogleClassroom\Service;
+
         // Course information
-        if (!$course = $this->googleClassroomService->getCourse($output, $input->getArgument('courseId'))) {
-            return 0;
+        if (!$course = $googleClassroom->getCourse($output, $input->getArgument('courseId'))) {
+            return COMMAND::FAILURE;
         }
 
         $output->writeln("<info>Course:</info> {$course->name}");
 
         // Students
-        if (!$results = $this->googleClassroomService->listStudents($output, $input->getArgument('courseId'))) {
-            return 0;
+        if (!$results = $googleClassroom->listStudents($output, $input->getArgument('courseId'))) {
+            return COMMAND::FAILURE;
         }
 
         if (count($results->getStudents()) == 0) {
             $output->writeln("<comment>No students found.</comment>");
-            return 0;
+            return COMMAND::FAILURE;
         }
 
-        $output->writeln("<info>Students:</info>");
+        $output->writeln("<info>Students</info>");
         foreach ($results->getStudents() as $student) {
             $output->writeln("{$student->getProfile()->name->fullName} - {$student->getUserId()} ");
         }
 
-        return 0;
+        return COMMAND::SUCCESS;
     }
 }

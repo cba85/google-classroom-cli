@@ -35,7 +35,7 @@ $ composer global update cba85/google-classroom-cli
 
 ### Google Classroom API setup
 
-1. Create an app and web client auth on Google Developer Console.
+1. [Create an app and web client auth on Google Developer Console](https://developers.google.com/classroom/quickstart/php)
 2. Download the `credentials.json` file and move it to the `auth/` folder of the application.
 3. First time you launch the application, you'll have to grant access of your Google application using Google OAuth2 server to retrieve an access token. Then, enter the verification code into the CLI prompt. Your access token will be saved in `auth/token.json` file.
 

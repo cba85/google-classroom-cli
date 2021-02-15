@@ -5,40 +5,57 @@ namespace App\GoogleClassroom;
 use Google_Client;
 use Google_Service_Classroom;
 use Exception;
+use App\GoogleClassroom\Traits\Assignment;
+use App\GoogleClassroom\Traits\Course;
+use App\GoogleClassroom\Traits\Error;
+use App\GoogleClassroom\Traits\Student;
+use App\GoogleClassroom\Traits\Submission;
 
 class Service
 {
+    use Assignment;
+    use Course;
+    use Error;
+    use Student;
+    use Submission;
+
+    const CREDENTIALS = __DIR__ . "/../../auth/credentials.json";
+
+    const TOKEN = __DIR__ . "/../../auth/token.json";
+
+    const SCOPES = [
+        Google_Service_Classroom::CLASSROOM_ANNOUNCEMENTS_READONLY,
+        Google_Service_Classroom::CLASSROOM_COURSES_READONLY, Google_Service_Classroom::CLASSROOM_COURSEWORK_ME_READONLY,
+        Google_Service_Classroom::CLASSROOM_COURSEWORK_STUDENTS_READONLY,
+        Google_Service_Classroom::CLASSROOM_GUARDIANLINKS_STUDENTS_READONLY,
+        Google_Service_Classroom::CLASSROOM_ROSTERS_READONLY,
+        Google_Service_Classroom::CLASSROOM_STUDENT_SUBMISSIONS_STUDENTS_READONLY,
+        Google_Service_Classroom::CLASSROOM_TOPICS_READONLY
+    ];
 
     protected $client;
 
-    protected string $credentials = __DIR__ . "/../../auth/credentials.json";
-
-    protected string $token = __DIR__ . "/../../auth/token.json";
+    public $service;
 
     public function __construct()
     {
         $this->createClient();
 
-        // Load previously authorized token from a file, if it exists. The file token.json stores the user's access and refresh tokens, and is created automatically when the authorization flow completes for the first time.
-        if (file_exists($this->token)) {
+        if (file_exists(self::TOKEN)) {
             $this->getToken();
         }
 
-        // If there is no previous token or it's expired.
         if ($this->client->isAccessTokenExpired()) {
             $this->createToken();
         }
-    }
 
-    public function getService()
-    {
-        return new Google_Service_Classroom($this->client);
+        $this->service = new Google_Service_Classroom($this->client);
     }
 
     protected function createClient()
     {
         $this->client = new Google_Client();
-        $this->client->setApplicationName("Google Classroom API PHP Quickstart");
+        $this->client->setApplicationName("Google Classroom API PHP");
         $this->client->setScopes([
             Google_Service_Classroom::CLASSROOM_ANNOUNCEMENTS_READONLY,
             Google_Service_Classroom::CLASSROOM_COURSES_READONLY, Google_Service_Classroom::CLASSROOM_COURSEWORK_ME_READONLY,
@@ -48,14 +65,20 @@ class Service
             Google_Service_Classroom::CLASSROOM_STUDENT_SUBMISSIONS_STUDENTS_READONLY,
             Google_Service_Classroom::CLASSROOM_TOPICS_READONLY
         ]);
-        $this->client->setAuthConfig($this->credentials);
+
+        try {
+            $this->client->setAuthConfig(self::CREDENTIALS);
+        } catch (\Google\Auth\Cache\InvalidArgumentException $e) {
+            return false;
+        }
+
         $this->client->setAccessType('offline');
         $this->client->setPrompt('select_account consent');
     }
 
     protected function getToken()
     {
-        $accessToken = json_decode(file_get_contents($this->token), true);
+        $accessToken = json_decode(file_get_contents(self::TOKEN), true);
         $this->client->setAccessToken($accessToken);
     }
 
@@ -81,9 +104,9 @@ class Service
             }
         }
         // Save the token to a file.
-        if (!file_exists(dirname($this->token))) {
-            mkdir(dirname($this->token), 0700, true);
+        if (!file_exists(dirname(self::TOKEN))) {
+            mkdir(dirname(self::TOKEN), 0700, true);
         }
-        file_put_contents($this->token, json_encode($this->client->getAccessToken()));
+        file_put_contents(self::TOKEN, json_encode($this->client->getAccessToken()));
     }
 }

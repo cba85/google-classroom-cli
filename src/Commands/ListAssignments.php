@@ -2,11 +2,12 @@
 
 namespace App\Commands;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ListAssignments extends Base
+class ListAssignments extends Command
 {
     protected static $defaultName = 'list-assignments';
 
@@ -19,19 +20,21 @@ class ListAssignments extends Base
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $googleClassroom = new \App\GoogleClassroom\Service;
+
         // Course information
-        if (!$course = $this->googleClassroomService->getCourse($output, $input->getArgument('courseId'))) {
-            return 0;
+        if (!$course = $googleClassroom->getCourse($output, $input->getArgument('courseId'))) {
+            return COMMAND::FAILURE;
         }
 
         $output->writeln("<info>Course:</info> {$course->name}");
 
         // Assignment
-        if (!$results = $this->googleClassroomService->listAssignments($output, $input->getArgument('courseId'))) {
-            return 0;
+        if (!$results = $googleClassroom->listAssignments($output, $input->getArgument('courseId'))) {
+            return COMMAND::FAILURE;
         }
 
-        $output->writeln("<info>Assignment:</info>");
+        $output->writeln("<info>Assignment</info>");
         foreach ($results->getCourseWork() as $assignment) {
             $output->writeLn(("<fg=blue>{$assignment->getTitle()}</fg=blue> ({$assignment->getState()}) - {$assignment->getId()}"));
             if ($assignment->getDueDate()) {
@@ -40,6 +43,6 @@ class ListAssignments extends Base
             $output->writeln("Type : {$assignment->getWorkType()}");
         }
 
-        return 0;
+        return COMMAND::SUCCESS;
     }
 }

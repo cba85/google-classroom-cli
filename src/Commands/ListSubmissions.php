@@ -2,11 +2,12 @@
 
 namespace App\Commands;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-class ListSubmissions extends Base
+class ListSubmissions extends Command
 {
     protected static $defaultName = 'list-submissions';
 
@@ -20,16 +21,18 @@ class ListSubmissions extends Base
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $googleClassroom = new \App\GoogleClassroom\Service;
+
         // Course information
-        if (!$course = $this->googleClassroomService->getCourse($output, $input->getArgument('courseId'))) {
-            return 0;
+        if (!$course = $googleClassroom->getCourse($output, $input->getArgument('courseId'))) {
+            return COMMAND::FAILURE;
         }
 
         $output->writeln("<info>Course:</info> {$course->name}");
 
         // Assignment information
-        if (!$assignment = $this->googleClassroomService->getAssignment($output, $input->getArgument('courseId'), $input->getArgument('courseWorkId'))) {
-            return 0;
+        if (!$assignment = $googleClassroom->getAssignment($output, $input->getArgument('courseId'), $input->getArgument('courseWorkId'))) {
+            return COMMAND::FAILURE;
         }
 
         $output->write("<info>Assignment:</info> ");
@@ -41,16 +44,16 @@ class ListSubmissions extends Base
         $output->writeln('');
 
         // Submissions
-        if (!$results = $this->googleClassroomService->listSubmissions($output, $input->getArgument('courseId'), $input->getArgument('courseWorkId'))) {
-            return 0;
+        if (!$results = $googleClassroom->listSubmissions($output, $input->getArgument('courseId'), $input->getArgument('courseWorkId'))) {
+            return COMMAND::FAILURE;
         }
 
-        $output->writeLn("<info>Submissions:</info> ");
+        $output->writeLn("<info>Submissions</info> ");
 
         foreach ($results->getStudentSubmissions() as $submission) {
             // Student information
-            if (!$student = $this->googleClassroomService->getStudent($output, $input->getArgument('courseId'), $submission->getUserId())) {
-                return 0;
+            if (!$student = $googleClassroom->getStudent($output, $input->getArgument('courseId'), $submission->getUserId())) {
+                return COMMAND::FAILURE;
             }
 
             $output->write("<fg=cyan>{$student->getProfile()->name->fullName}</>");
@@ -84,6 +87,6 @@ class ListSubmissions extends Base
             }
         }
 
-        return 0;
+        return COMMAND::SUCCESS;
     }
 }
