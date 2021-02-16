@@ -28,7 +28,7 @@ class ListSubmittedUrls extends Command
             return COMMAND::FAILURE;
         }
 
-        $output->writeln("<info>Course:</info> {$course->name}");
+        $output->writeln("<info>Course:</info> {$course->name} - {$course->getId()}");
 
         // Assignment information
         if (!$assignment = $googleClassroom->getAssignment($output, $input->getArgument('courseId'), $input->getArgument('courseWorkId'))) {

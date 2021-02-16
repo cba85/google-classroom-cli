@@ -27,7 +27,7 @@ class ListStudents extends Command
             return COMMAND::FAILURE;
         }
 
-        $output->writeln("<info>Course:</info> {$course->name}");
+        $output->writeln("<info>Course:</info> {$course->name} - {$course->getId()}");
 
         // Students
         if (!$results = $googleClassroom->listStudents($output, $input->getArgument('courseId'))) {

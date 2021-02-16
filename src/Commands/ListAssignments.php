@@ -27,20 +27,19 @@ class ListAssignments extends Command
             return COMMAND::FAILURE;
         }
 
-        $output->writeln("<info>Course:</info> {$course->name}");
+        $output->writeln("<info>Course:</info> {$course->name} - {$course->getId()}");
 
         // Assignment
         if (!$results = $googleClassroom->listAssignments($output, $input->getArgument('courseId'))) {
             return COMMAND::FAILURE;
         }
 
-        $output->writeln("<info>Assignment</info>");
+        $output->writeln("<info>Assignments</info>");
         foreach ($results->getCourseWork() as $assignment) {
             $output->writeLn(("<fg=blue>{$assignment->getTitle()}</fg=blue> ({$assignment->getState()}) - {$assignment->getId()}"));
             if ($assignment->getDueDate()) {
-                $output->writeLn(("Due: {$assignment->getDueDate()->getDay()}/{$assignment->getDueDate()->getMonth()}/{$assignment->getDueDate()->getYear()}"));
+                $output->writeLn(("Type : {$assignment->getWorkType()} | Due: {$assignment->getDueDate()->getDay()}/{$assignment->getDueDate()->getMonth()}/{$assignment->getDueDate()->getYear()}"));
             }
-            $output->writeln("Type : {$assignment->getWorkType()}");
         }
 
         return COMMAND::SUCCESS;
